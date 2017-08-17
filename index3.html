@@ -11,14 +11,45 @@
         <link rel="shortcut icon" href="../favicon.ico"> 
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="js/validetta.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/demo.css" />
         <link rel="stylesheet" type="text/css" href="css/style1.css" />
 		<link rel="stylesheet" type="text/css" href="css/chosen.css" />
+		<link rel="stylesheet" type="text/css" href="css/validetta.min.css" />
 		<link rel="icon" href="images/icon.png" />
 			<script type="text/javascript">
 		
 		jQuery(document).ready(function(){
+		
 	jQuery(".chosen-select").chosen();
+	
+
+    $('#frmLogin').validetta({
+		bubblePosition: 'right',
+        bubbleGapTop: 0,
+        bubbleGapLeft: 0,
+        onValid : function( event ) {
+            event.preventDefault();
+            $.ajax({
+                url : 'ajax.json',
+                data : $(this.form).serialize(),
+                dataType : 'json',
+                beforeSend : function(){
+                    console.log('Started request !');
+                }
+            })
+            .done( function( data ){
+                alert("Hello");
+            })
+            .fail( function( jqXHR, textStatus ){
+                console.log(textStatus+':'+jqXHR.status+' : '+jqXHR.statusText);
+            })
+            .always( function( result ){ console.log('Request done !!');
+			});
+		}
+    });
+
+	
 });
 		
 		</script>
@@ -35,7 +66,8 @@
 			<li><span>Image 08</span><div></div></li>
 			<li><span>Image 09</span><div></div></li>
         </ul>
-		<div style="width: 450px; height: 430px; position:fixed; left: 50%; top:50%; transform: translate(-50%, -50%); background-image: url('images/login_background3.png');z-index: 1;">
+		<div style="width: 650px; height: 430px; position:fixed; left: 55%; top:50%; transform: translate(-50%, -50%); background-image: url('images/login_background3.png');z-index: 1;background-repeat: no-repeat;">
+		<form id="frmLogin" method="POST" action="#">
 			<div id="loginForm">
 				<ul>
 					<li>
@@ -46,8 +78,8 @@
 							</tr>
 						</table>
 					</li>
-					<li style="padding-top: 30px;"><input type="text" name="txtUserAccount" placeholder="Kullanıcı Kodunu Giriniz" style="width: 97%"/></li>
-					<li style="padding-top: 10px;"><input type="password" name="txtPassword" placeholder="Şifrenizi Giriniz" style="width: 97%"/></li>
+					<li style="padding-top: 30px;"><input type="text" name="txtUserAccount" placeholder="Kullanıcı Kodunu Giriniz" style="width: 97%" data-validetta="required" data-vd-message-required="Kullanıcı Kodu alanı boş olamaz"/></li>
+					<li style="padding-top: 10px;"><input type="password" name="txtPassword" placeholder="Şifrenizi Giriniz" style="width: 97%" data-validetta="required" data-vd-message-required="Şifre alanı boş olamaz"/></li>
 					<li style="padding-top: 10px;">
 						 <select data-placeholder="İstasyon Seçiniz" class="chosen-select" tabindex="2">
             <option value=""></option>
@@ -389,8 +421,11 @@
 <option value="8151">8151 - DÜZCE-MOBİL</option>
           </select>
 					</li>
+					<li style="padding-top: 35px;"><a href="#" id = "lblPasswordRenewal">Şifremi Unuttum</a></li>
+					<li style="padding-top: 10px;"><button class="skip">Giriş</button></li>
 				</ul>
 			</div>
+			</form>
 		</div>
 		<div id="dBottomInfoBar">
 			<table>
